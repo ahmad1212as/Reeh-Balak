@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body, html {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.5)
+        ),
+        url('https://www.raed.net/img?id=1377900') no-repeat center center fixed;
+      background-size: cover;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 25px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 30px rgba(0, 123, 255, 0.15);
+      width: 400px;
+      max-width: 95vw;
+      padding: 40px 35px 50px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeSlideIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 26px;
+      margin-bottom: 28px;
+      color: #007bff;
+      letter-spacing: 1px;
+    }
+
+    #forgotBox h2 {
+      margin-bottom: 16px;
+    }
+
+    #recoveredSection h2 {
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      color: #007bff;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 6px;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 15px 18px;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      border: 1.8px solid #ccc;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      outline: none;
+      font-weight: 600;
+      color: #333;
+      background-color: #fefefe;
+      direction: ltr;
+      text-align: left;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+      background-color: #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #007bff, #0056b3);
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: linear-gradient(90deg, #0056b3, #004494);
+      transform: scale(1.05);
+    }
+
+    button:disabled {
+      background: #a0c1ff;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .spinner {
+      margin: 18px auto 24px;
+      width: 36px;
+      height: 36px;
+      border: 5px solid #ddd;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none !important;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .extra-links {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 15px;
+    }
+
+    .extra-links a {
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 0 12px;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .extra-links a:hover {
+      text-decoration: underline;
+      color: #004494;
+    }
+
+    #notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #007bff;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+      font-weight: 700;
+      font-size: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 9999;
+      max-width: 90%;
+      text-align: center;
+      word-break: break-word;
+      white-space: normal;
+      user-select: none;
+    }
+
+    #notification.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #notification.error {
+      background-color: #d9534f;
+      box-shadow: 0 4px 15px rgba(217, 83, 79, 0.5);
+    }
+
+    #notification.success {
+      background-color: #28a745;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.5);
+    }
+
+    #forgotBox {
+      display: none;
+    }
+
+    .output-box {
+      background: #f1f1f1;
+      padding: 20px 25px;
+      margin-top: 16px;
+      border-radius: 15px;
+      font-size: 16px;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.07);
+      color: #222;
+      line-height: 1.7;
+      word-break: break-word;
+      user-select: text;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .back-arrow {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: stroke 0.3s ease;
+      color: #555;
+    }
+
+    .back-arrow:hover svg path {
+      stroke: #007bff;
+    }
+
+    .recovered-item {
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      font-size: 17px;
+      align-items: center;
+    }
+
+    .recovered-label {
+      font-weight: 700;
+      color: #007bff;
+      min-width: 140px;
+      flex-shrink: 0;
+    }
+
+    /* appContainer full screen */
+    #appContainer {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      overflow: auto;
+      background: white;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 20px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+<div id="notification" role="alert" aria-live="assertive"></div>
+
+<div class="container" id="loginBox">
+  <h2>Login</h2>
+  <label for="username">Username:</label>
+  <input type="text" id="username" placeholder="Example: ahmad" autocomplete="username"
+    oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')" />
+  <label for="password">Password:</label>
+  <input type="password" id="password" placeholder="Example: 12345" autocomplete="current-password"
+    oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+  <button id="loginBtn">Login</button>
+  <div class="spinner" id="spinner"></div>
+  <div class="extra-links">
+    <a href="https://www.instagram.com/ahmad_algwary/" target="_blank">Create Account</a>
+    <a onclick="toggleForgot(true)">Forgot Password?</a>
+  </div>
+</div>
+
+<div class="container" id="forgotBox">
+  <div class="back-arrow" onclick="toggleForgot(false)" title="Back to Login">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M15 18L9 12L15 6" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <h2 id="recoveryTitle">Account Recovery</h2>
+
+  <form id="forgotForm" onsubmit="return false;">
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" placeholder="07xxxxxxxx" maxlength="10"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+    <label for="code">Security Code:</label>
+    <input type="text" id="code" placeholder="1234" maxlength="4"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+    <button type="button" onclick="recoverAccount()">Recover Account</button>
+  </form>
+
+  <div id="recoveredSection" style="display:none;">
+    <h2>Account Details</h2>
+    <div id="recoveredData" class="output-box"></div>
+  </div>
+</div>
+
+<!-- الحاوية اللي بتعرض صفحة التطبيق بعد تسجيل الدخول -->
+<div id="appContainer"></div>
+
+<script>
+  const dataURL = "https://raw.githubusercontent.com/ahmad1212as/Zuis-Tawjihi/refs/heads/main/information";
+
+  const loginBtn = document.getElementById('loginBtn');
+  const spinner = document.getElementById('spinner');
+  const notification = document.getElementById('notification');
+
+  let notificationTimeout;
+
+  function showNotification(key, duration = 4000) {
+    clearTimeout(notificationTimeout);
+    const messages = {
+      fill: "Fill all fields",
+      successLogin: "Success",
+      failLogin: "Invalid data",
+      fillRecover: "Fill all fields",
+      successRecover: "Recovered",
+      failRecover: "Invalid data",
+      serverError: "Server error"
+    };
+    const types = {
+      fill: "error",
+      successLogin: "success",
+      failLogin: "error",
+      fillRecover: "error",
+      successRecover: "success",
+      failRecover: "error",
+      serverError: "error"
+    };
+
+    notification.textContent = messages[key] || "";
+    notification.className = "";
+    notification.classList.add(types[key] || "success", "show");
+
+    notificationTimeout = setTimeout(() => {
+      notification.classList.remove("show");
+    }, duration);
+  }
+
+  function toggleForgot(show) {
+    document.getElementById('loginBox').style.display = show ? 'none' : 'block';
+    document.getElementById('forgotBox').style.display = show ? 'block' : 'none';
+
+    if (!show) {
+      document.getElementById('phone').value = '';
+      document.getElementById('code').value = '';
+      document.getElementById('recoveredData').innerHTML = '';
+      document.getElementById('recoveredSection').style.display = 'none';
+      document.getElementById('forgotForm').style.display = 'block';
+      document.getElementById('recoveryTitle').style.display = 'block';
+    }
+  }
+
+  loginBtn.addEventListener('click', () => {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+
+    if (!user || !pass) {
+      showNotification('fill');
+      return;
+    }
+
+    spinner.style.display = "block";
+    fetch(dataURL)
+      .then(res => res.json())
+      .then(data => {
+        spinner.style.display = "none";
+        const userFound = data.find(item => item.username === user && item.password === pass);
+        if (userFound) {
+          showNotification("successLogin", 5000);
+
+          // اخفاء صفحة الدخول
+          document.getElementById('loginBox').style.display = 'none';
+          document.getElementById('forgotBox').style.display = 'none';
+
+          // اظهار صفحة التطبيق
+          const appContainer = document.getElementById('appContainer');
+          appContainer.style.display = 'block';
+
+          // جلب محتوى التطبيق من الرابط وحقنه
+          fetch('https://raw.githubusercontent.com/ahmad1212as/Zuis-Tawjihi/refs/heads/main/app')
+            .then(res => res.text())
+            .then(html => {
+              appContainer.innerHTML = html;
+            })
+            .catch(() => {
+              showNotification('serverError');
+            });
+
+        } else {
+          showNotification("failLogin", 5000);
+        }
+      })
+      .catch(() => {
+        spinner.style.display = "none";
+        showNotification("serverError", 5000);
+      });
+  });
+
+  function recoverAccount() {
+    const phone = document.getElementById('phone').value.trim();
+    const code = document.getElementById('code').value.trim();
+
+    if (!phone || !code) {
+      showNotification('fillRecover');
+      return;
+    }
+
+    spinner.style.display = 'block';
+
+    fetch(dataURL)
+      .then(res => res.json())
+      .then(data => {
+        spinner.style.display = 'none';
+
+        const filtered = data.filter(item =>
+          item["phone number"] === phone && item["Security code"] === code
+        );
+
+        if (filtered.length) {
+          let outputHTML = '';
+          filtered.forEach(acc => {
+            outputHTML += `
+              <div class="recovered-item"><span class="recovered-label">Username:</span> ${acc.username}</div>
+              <div class="recovered-item"><span class="recovered-label">Password:</span> ${acc.password}</div>
+            `;
+          });
+
+          document.getElementById('forgotForm').style.display = 'none';
+          document.getElementById('recoveryTitle').style.display = 'none';
+          document.getElementById('recoveredData').innerHTML = outputHTML;
+          document.getElementById('recoveredSection').style.display = 'block';
+
+          showNotification('successRecover');
+        } else {
+          showNotification('failRecover');
+        }
+      })
+      .catch(() => {
+        spinner.style.display = 'none';
+        showNotification('serverError');
+      });
+  }
+</script>
+
+</body>
+</html>
