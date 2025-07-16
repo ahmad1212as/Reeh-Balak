@@ -1,9 +1,13 @@
 [
   {
+    "index.html": "https://raw.githubusercontent.com/ahmad1212as/Reeh-Balak/main/homework%20app/index.html",
+    "style.css": "https://raw.githubusercontent.com/ahmad1212as/Reeh-Balak/main/homework%20app/style.css"
+     },
+     {
     "username": "ahmad",
     "password": "222",
     "phone": "222",
-    "class": "https://raw.githubusercontent.com/ahmad1212as/Reeh-Balak/main/homework%20app/First%20academic%20class.html",
+    "clascript.jsss": "https://raw.githubusercontent.com/ahmad1212as/Reeh-Balak/main/homework%20app/Sixth%20grade/script.js",
     "securityCode": "15639"
   }
 ]
