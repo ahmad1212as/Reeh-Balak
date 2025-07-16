@@ -460,37 +460,14 @@
     })
     .catch(err => {
       subjectsList.classList.add('empty-message');
-      subjectsList.innerHTML = `<p>حدث خطأ أثناء تحميل البيانات، يرجى المحاولة لاحقاً.</p>`;
+      subjectsList.innerHTML = `<p>حدث خطأ أثناء تحميل البيانات، يرجى المحاولة لاحقًا.</p>`;
+      console.error(err);
     });
 
   backToTodayBtn.addEventListener('click', () => {
     showingPrevious = false;
+    showSubjectsList(todaysSubjects);
     backToTodayBtn.style.display = 'none';
-    questionsList.classList.remove('active');
-
-    if (todaysSubjects.length === 0) {
-      if (previousSubjects.length === 0) {
-        showNoHomeworkMessage();
-      } else {
-        subjectsList.classList.add('empty-message');
-        subjectsList.innerHTML = `
-          <p>لم يتم إضافة واجبات هذا اليوم بعد أو لا توجد واجبات له. فريقنا يعمل على تحميل الأسئلة. نشكركم على صبركم.</p>
-          <button id="showPreviousBtn" class="show-previous-btn">عرض واجبات اليوم السابق (${yesterdayFormatted})</button>
-        `;
-
-        document.getElementById('showPreviousBtn').addEventListener('click', () => {
-          showingPrevious = true;
-          backToTodayBtn.style.display = 'inline-block';
-          subjectsList.classList.remove('empty-message');
-          showSubjectsList(previousSubjects);
-        });
-      }
-    } else {
-      subjectsList.classList.remove('empty-message');
-      showSubjectsList(todaysSubjects);
-    }
-
-    subjectsList.style.display = 'flex';
   });
 </script>
 
